@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react/cjs/react.production.min";
-import { useContext } from "react/cjs/react.production.min";
+import { useEffect } from "react";
+import { useContext } from "react";
 import { ShopContext } from "../context/shopContext";
-import { Text, Div, Col, Row, Container } from 'atomize';
+import { Text, Div, Col, Row, Container, Button } from 'atomize';
 
 
 const ProductPage = () => {
@@ -25,7 +25,8 @@ useEffect(() => {
               </Col>  
               <Col>
                 <Text>{product.title}</Text>
-                <Text>{`$`}</Text>
+                <Text>${product.variants[0].price}</Text>
+                <Button onClick = {() => addItemToCheckout(product.variants[0].id, 1)}>Add To Cart</Button>
               </Col>  
             </Row>
         </Container>
