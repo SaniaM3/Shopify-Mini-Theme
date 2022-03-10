@@ -3,12 +3,13 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { ShopContext } from "../context/shopContext";
 import { Text, Div, Col, Row, Container, Button } from 'atomize';
+import Cart from "../components/Cart";
 
 
 const ProductPage = () => {
 
 let {id} = useParams();
-const {fetchProductWithId, addItemToCheckout, product} = useContext(ShopContext)
+const {fetchProductWithId, addItemToCheckout, product, openCart} = useContext(ShopContext)
 
 useEffect(() => {
     fetchProductWithId(id)
@@ -26,7 +27,10 @@ useEffect(() => {
               <Col>
                 <Text>{product.title}</Text>
                 <Text>${product.variants[0].price}</Text>
-                <Button onClick = {() => addItemToCheckout(product.variants[0].id, 1)}>Add To Cart</Button>
+                <Button onClick = {() => {
+                    addItemToCheckout(product.variants[0].id, 1)
+                    openCart()
+                    }}>Add To Cart</Button>
               </Col>  
             </Row>
         </Container>

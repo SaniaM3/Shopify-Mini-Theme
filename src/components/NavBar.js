@@ -9,7 +9,8 @@ const NavBar = () => {
     const { openCart } = useContext(ShopContext)
 
     return(
-        <Container>
+        
+        <Container d = 'flex' flexDir = 'row' p = '2rem' justify = 'space-between'>
             <NavLink to = '/'>Shop</NavLink>
             <Anchor onClick = {()=> openCart()}>Cart</Anchor>
         </Container>
