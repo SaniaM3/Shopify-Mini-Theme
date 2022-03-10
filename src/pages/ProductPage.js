@@ -1,3 +1,6 @@
+
+
+
 const ProductPage = () => {
     return(
         <div>
