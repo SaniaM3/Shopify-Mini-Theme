@@ -18,7 +18,7 @@ function App() {
     <StyletronProvider value={engine} debug={debug} debugAfterHydration>
       <Routes>
       <Route path="/*" element = {<HomePage />} />
-      <Route path="/product" element = {<ProductPage />}/>
+      <Route path="/product/:id" element = {<ProductPage />}/>
       </Routes>
   </StyletronProvider>
   </ShopProvider>
