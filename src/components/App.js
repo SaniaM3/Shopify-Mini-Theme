@@ -5,6 +5,7 @@ import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import ProductPage from "../pages/ProductPage";
 import ShopProvider from "../context/shopContext";
+import Test from "./Test";
 // import Cart from "./Cart";
 // import NavBar from "./NavBar";
 
@@ -20,6 +21,7 @@ function App() {
     <StyletronProvider value={engine} debug={debug} debugAfterHydration>
     {/* <NavBar /> */}
     {/* <Cart /> */}
+    <Test />
       <Routes>
       <Route path="/*" element = {<HomePage />} />
       <Route path="/product/:id" element = {<ProductPage />}/>
