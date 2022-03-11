@@ -31,7 +31,7 @@ const HomePage = () => {
                                     bgPos = 'center center'
                                     />
                                     <Text>{product.title}</Text>    
-                                    <Text>{product.variants[0].price}</Text>    
+                                    <Text>${product.variants[0].price}</Text>    
                                 </Div>
                                  </NavLink>
 
