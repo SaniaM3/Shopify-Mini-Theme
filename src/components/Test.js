@@ -14,9 +14,7 @@ const Test = () => {
                 <Link to="/"><Icon name="Store" size="30px" color="black500" /></Link>
                 <Anchor onClick={() => openCart()}><Icon name="Bag" size="20px" color="black500" /></Anchor>
             </Container>
-        </>
-    )
-}
+
 
 
 
