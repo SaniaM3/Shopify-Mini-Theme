@@ -21,7 +21,6 @@ function App() {
     <StyletronProvider value={engine} debug={debug} debugAfterHydration>
     {/* <NavBar /> */}
     {/* <Cart /> */}
-    <Test />
       <Routes>
       <Route path="/*" element = {<HomePage />} />
       <Route path="/product/:id" element = {<ProductPage />}/>
