@@ -1,82 +1,107 @@
-import React, { Component } from "react/cjs/react.production.min";
-import Client from 'shopify-buy';
+import React, { Component } from "react";
+import Client from "shopify-buy";
 
 const ShopContext = React.createContext();
 
 const client = Client.buildClient({
-    domain: 'graphql.myshopify.com',
-    storefrontAccessToken: 'dd4d4dc146542ba7763305d71d1b3d38'
-  });
+  storefrontAccessToken: "dd4d4dc146542ba7763305d71d1b3d38",
+  domain: "graphql.myshopify.com",
+});
 
 class ShopProvider extends Component {
+  state = {
+    products: [],
+    product: {},
+    checkout: {},
+    isCartOpen: false,
+  };
 
-    state = {
-        products: [],
-        product: {},
-        checkout: {},
-        isCartOper: false,
-        test: "test"
+  componentDidMount() {
+    // this.createCheckout();
+
+    //Check if localStorage has a checkout_id saved
+    if (localStorage.checkout) {
+      this.fetchCheckout(localStorage.checkout);
+    } else {
+      this.createCheckout();
     }
+    //if there is no checkout_id in localStorage then we will create a new checkout
 
-    componentDidMount(){
-        this.createCheckout();
-    }
+    //else fetch the checkout from shopify
+  }
 
-    createCheckout = async () => {
-        const checkout = await client.checkout.create()
-        this.setState({ checkout: checkout })
-    }
+  createCheckout = async () => {
+    const checkout = await client.checkout.create();
+    localStorage.setItem("checkout", checkout.id);
+    await this.setState({ checkout: checkout });
+  };
 
-    addItemToCheckout = async (variantId, quantity) => {
-        const lineItemsToAdd = [{
-            variantId,
-            quantity: parseInt(quantity, 10),
-        }]
+  fetchCheckout = async (checkoutId) => {
+    client.checkout
+      .fetch(checkoutId)
+      .then((checkout) => {
+        this.setState({ checkout: checkout });
+      })
+      .catch((err) => console.log(err));
+  };
 
-        const checkout = await client.checkout.addLineItems(this.state.checkout.id, lineItemsToAdd)
-        this.setState({ checkout: checkout })
-    }
+  addItemToCheckout = async (variantId, quantity) => {
+    const lineItemsToAdd = [
+      {
+        variantId,
+        quantity: parseInt(quantity, 10),
+      },
+    ];
+    const checkout = await client.checkout.addLineItems(
+      this.state.checkout.id,
+      lineItemsToAdd
+    );
+    this.setState({ checkout: checkout });
+    console.log(checkout);
 
-    fetchAllProducts = async () => {
-        const products = await client.product.fetchAll()
-        this.setState({ products: products })
-    }
+    this.openCart();
+  };
 
-    fetchProductWithId = async (id) => {
-        const product = await client.product.fetch(id)
-        this.setState({ product: product })
-    }
+  fetchAllProducts = async () => {
+    const products = await client.product.fetchAll();
+    this.setState({ products: products });
+  };
 
-    closeCart = async () => {
-        this.setState({ isCartOpen: false})
-    }
+  fetchProductWithId = async (id) => {
+    const product = await client.product.fetch(id);
+    this.setState({ product: product });
+    console.log(JSON.stringify(product));
 
-    openCart = async () => {
-        this.setState({ isCartOpen: true })
-    }
+    return product;
+  };
 
+  closeCart = () => {
+    this.setState({ isCartOpen: false });
+  };
+  openCart = () => {
+    this.setState({ isCartOpen: true });
+  };
 
-    render() {
-        return (
-            <ShopContext.Provider value={{
-                ...this.state,
-                fetchAllProducts: this.fetchAllProducts,
-                fetchProductWithId: this.fetchProductWithId,
-                closerCart: this.closeCart,
-                openCart: this.openCart,
-                addItemToCheckout: this.addItemToCheckout
-
-                }}>
-                    {this.props.children}
-            </ShopContext.Provider>
-        )
-    }
+  render() {
+    return (
+      <ShopContext.Provider
+        value={{
+          ...this.state,
+          fetchAllProducts: this.fetchAllProducts,
+          fetchProductWithId: this.fetchProductWithId,
+          closeCart: this.closeCart,
+          openCart: this.openCart,
+          addItemToCheckout: this.addItemToCheckout,
+        }}
+      >
+        {this.props.children}
+      </ShopContext.Provider>
+    );
+  }
 }
 
-const ShopConsumer = ShopContext.Consumer
+const ShopConsumer = ShopContext.Consumer;
 
-export {ShopConsumer, ShopContext}
+export { ShopConsumer, ShopContext };
 
 export default ShopProvider;
-
-
